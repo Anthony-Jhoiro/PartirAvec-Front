@@ -1,24 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import {BrowserRouter, Link, Switch, Route} from "react-router-dom";
+import {NouvelleDestination} from "./Components/NouvelleDestination";
+import {Map} from "./Components/Map";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <BrowserRouter>
+        <nav className="neumorphic-nav">
+          <h1>Carte</h1>
+          <Link to="/destination/new" className="nav-link">Nouvelle destination</Link>
+          <label htmlFor="blurFilter">Blur</label>
+          <input type="checkbox" name="" id="blurFilter" hidden />
+        </nav>
+
+          <Switch>
+            <Route path={"/destination/new"}><NouvelleDestination/></Route>
+          </Switch>
+          </BrowserRouter>
+
       </header>
+      <Map/>
     </div>
   );
 }

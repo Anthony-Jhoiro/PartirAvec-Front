@@ -1,30 +1,26 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import './App.scss';
-import {BrowserRouter, Link, Switch, Route} from "react-router-dom";
-import {NouvelleDestination} from "./Components/NouvelleDestination";
-import {Map} from "./Components/Map";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import MainPage from "./Pages/MainPage";
+import MapPage from "./Pages/MapPage";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
+
+
+class App extends React.Component{
+
+  render() {
+
+    return (
         <BrowserRouter>
-        <nav className="neumorphic-nav">
-          <h1>Carte</h1>
-          <Link to="/destination/new" className="nav-link">Nouvelle destination</Link>
-          <label htmlFor="blurFilter">Blur</label>
-          <input type="checkbox" name="" id="blurFilter" hidden />
-        </nav>
-
-          <Switch>
-            <Route path={"/destination/new"}><NouvelleDestination/></Route>
-          </Switch>
-          </BrowserRouter>
-
-      </header>
-      <Map/>
-    </div>
-  );
+          <Suspense fallback={<div>Loading...</div>}>
+            <Switch>
+              <Route exact path={'/'} component={MainPage}/>
+              <Route path={'/map'} component={MapPage}/>
+            </Switch>
+          </Suspense>
+        </BrowserRouter>
+    );
+  }
 }
 
 export default App;

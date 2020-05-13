@@ -1,6 +1,5 @@
 import React from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
@@ -8,7 +7,14 @@ import am4geodata_franceHigh from "@amcharts/amcharts4-geodata/franceHigh";
 
 am4core.useTheme(am4themes_animated);
 
+/*
+Couleurs :
+- #93e6f5 && #acacac
+- #cccccc && #0077ff
+ */
+
 export const selectionColor = '#93e6f5';
+export const backgroundColor = '#acacac'
 
 export class Map extends React.Component {
 
@@ -17,7 +23,6 @@ export class Map extends React.Component {
 
         // Set map definition
         chart.geodata = am4geodata_worldLow;
-        // chart.geodata = am4geodata_franceHigh;
 
         // Set projection
         chart.projection = new am4maps.projections.Miller();
@@ -64,7 +69,7 @@ export class Map extends React.Component {
         // France detail
         function formatTemplate(template) {
             template.tooltipText = "{name}";
-            template.fill = am4core.color("#a5a5a5");
+            template.fill = am4core.color(backgroundColor);
 
             template.propertyFields.fill = 'fill';
 

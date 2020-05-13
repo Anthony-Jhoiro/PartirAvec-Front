@@ -3,6 +3,8 @@ import {Map} from "../Components/Map";
 import Keycloak from 'keycloak-js';
 import Spinner from "../Components/tools/Spinner/Spinner";
 import MainMenu from "../Components/tools/MainMenu/MainMenu";
+import {BrowserRouter, Route} from "react-router-dom";
+import Paper from "../Components/Paper";
 
 
 class MapPage extends Component{
@@ -27,8 +29,11 @@ class MapPage extends Component{
         if (this.state.keycloak) {
             if (this.state.authenticated) return (
                 <main>
-                    <MainMenu/>
                     <Map/>
+                    <BrowserRouter>
+                        <MainMenu/>
+                        <Route path={'/map/new'} component={Paper} />
+                    </BrowserRouter>
                 </main>
             );
         else {

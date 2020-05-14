@@ -1,7 +1,8 @@
 import React from 'react';
 import './Paper.scss';
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import {faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import Geocode from "react-geocode";
 
 class Paper extends React.Component {
 
@@ -10,28 +11,49 @@ class Paper extends React.Component {
         this.state = {
             currentScrollPosition: 0,
             lastScrollTop: 0,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid dolore doloremque hic libero maxime quaerat velit. Ad consequuntur earum explicabo hic, itaque magni necessitatibus nemo quae sequi, veritatis voluptate voluptatibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur eum itaque voluptas. Alias consectetur eius facilis hic molestiae nihil omnis qui rerum, velit voluptas? Exercitationem id optio provident ullam voluptate.',
-            title: 'Title',
+            text: '',
+            title: '',
             imageList: [
                 '/images/1.jpg',
                 '/images/2.jpg',
                 '/images/3.jpg'
             ],
-            activeImageIndex: 0
+            activeImageIndex: 0,
+            placeTimeout: null,
+            place: ''
         }
 
         this.handleChanges = this.handleChanges.bind(this);
-        this.previousImage= this.previousImage.bind(this);
+        this.previousImage = this.previousImage.bind(this);
         this.nextImage = this.nextImage.bind(this);
     }
 
     // Form
     handleChanges(event) {
-        console.log(event.target)
+
         if (event.target.name === 'text') {
-            this.setState({text : event.target.value});
+            this.setState({text: event.target.value});
         } else if (event.target.name === 'title') {
-            this.setState({title : event.target.value});
+            this.setState({title: event.target.value});
+        } else if (event.target.name === 'place') {
+
+            clearTimeout(this.state.placeTimeout);
+            this.setState({
+                placeTimeout: setTimeout(() => {
+                    if (this.state.place === null || this.state.place === "") return;
+                    Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_KEY);
+                    Geocode.setLanguage("fr");
+                    Geocode.fromAddress(this.state.place).then(
+                        response => {
+                            console.log(response);
+                        },
+                        error => {
+                            console.error(error);
+                        }
+                    )
+                }, 1000),
+                place: event.target.value
+            });
         }
     }
 
@@ -56,10 +78,10 @@ class Paper extends React.Component {
         });
     }
 
-    getImageList()  {
+    getImageList() {
         return this.state.imageList.map((image, i) => {
-            console.log(i);
-            return <img key={i} className={`carousel-image ${(this.state.activeImageIndex === i)? "active" : ""} `} src={image} alt={"introuvable"}/>
+            return <img key={i} className={`carousel-image ${(this.state.activeImageIndex === i) ? "active" : ""} `}
+                        src={image} alt={"introuvable"}/>
         })
     }
 
@@ -84,13 +106,17 @@ class Paper extends React.Component {
             <div className="pile">
                 <div className="paper">
                     <div className="lines">
-                        <input className="title" value={this.state.title} onChange={this.handleChanges} name={'title'}/>
+                        <input className="title" value={this.state.title} onChange={this.handleChanges} name={'title'} placeholder={'Titre'}/>
                         <div className="content">
-                            <textarea className="text" id="text" spellCheck="false" onScroll={e => this.textScroll(e)} onChange={this.handleChanges}
+                            <textarea className="text" id="text" spellCheck="false" onScroll={e => this.textScroll(e)}
+                                      onChange={this.handleChanges}
                                       value={this.state.text} name={'text'}
+                                      placeholder={'Que souhaites-tu raconter ?'}
                             />
                             <div className="location">
-                                <FontAwesomeIcon icon={faMapMarkerAlt}/> Bruges, Belgique
+                                <FontAwesomeIcon icon={faMapMarkerAlt}/>
+                                <input type="text" className="place-input" name={'place'} value={this.state.place}
+                                       onChange={this.handleChanges} placeholder={'Où ?'}/>
                             </div>
                             <div className="carousel">
                                 <b className="carousel-icon left" onClick={this.previousImage}>{"<"}</b>

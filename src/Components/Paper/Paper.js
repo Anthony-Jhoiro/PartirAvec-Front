@@ -10,6 +10,28 @@ class Paper extends React.Component {
         this.state = {
             currentScrollPosition: 0,
             lastScrollTop: 0,
+            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid dolore doloremque hic libero maxime quaerat velit. Ad consequuntur earum explicabo hic, itaque magni necessitatibus nemo quae sequi, veritatis voluptate voluptatibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur eum itaque voluptas. Alias consectetur eius facilis hic molestiae nihil omnis qui rerum, velit voluptas? Exercitationem id optio provident ullam voluptate.',
+            title: 'Title',
+            imageList: [
+                '/images/1.jpg',
+                '/images/2.jpg',
+                '/images/3.jpg'
+            ],
+            activeImageIndex: 0
+        }
+
+        this.handleChanges = this.handleChanges.bind(this);
+        this.previousImage= this.previousImage.bind(this);
+        this.nextImage = this.nextImage.bind(this);
+    }
+
+    // Form
+    handleChanges(event) {
+        console.log(event.target)
+        if (event.target.name === 'text') {
+            this.setState({text : event.target.value});
+        } else if (event.target.name === 'title') {
+            this.setState({title : event.target.value});
         }
     }
 
@@ -34,69 +56,48 @@ class Paper extends React.Component {
         });
     }
 
+    getImageList()  {
+        return this.state.imageList.map((image, i) => {
+            console.log(i);
+            return <img key={i} className={`carousel-image ${(this.state.activeImageIndex === i)? "active" : ""} `} src={image} alt={"introuvable"}/>
+        })
+    }
+
+    nextImage() {
+        if (this.state.activeImageIndex === this.state.imageList.length - 1) {
+            this.setState({activeImageIndex: 0});
+        } else {
+            this.setState({activeImageIndex: this.state.activeImageIndex + 1});
+        }
+    }
+
+    previousImage() {
+        if (this.state.activeImageIndex === 0) {
+            this.setState({activeImageIndex: this.state.imageList.length - 1});
+        } else {
+            this.setState({activeImageIndex: this.state.activeImageIndex - 1});
+        }
+    }
+
     render() {
         return (
             <div className="pile">
                 <div className="paper">
                     <div className="lines">
-                        <input className="title" value={'title'} />
+                        <input className="title" value={this.state.title} onChange={this.handleChanges} name={'title'}/>
                         <div className="content">
-                            <textarea className="text" id="text" spellCheck="false" onScroll={e => this.textScroll(e)} >
-                                            You can edit this text!
-            Cupcake ipsum dolor sit amet liquorice fruitcake. Candy canes jelly beans sweet roll cupcake lollipop.
-            Powder
-            carrot cake toffee brownie. Marshmallow sweet roll donut. Chocolate cake apple pie candy canes tiramisu
-            dragée
-            wafer. Croissant cookie lemon drops tiramisu jelly-o donut. Sweet gummi bears ice cream.
-            Cupcake ipsum dolor sit amet liquorice fruitcake. Candy canes jelly beans sweet roll cupcake lollipop.
-            Powder
-            carrot cake toffee brownie. Marshmallow sweet roll donut. Chocolate cake apple pie candy canes tiramisu
-            dragée
-            wafer. Croissant cookie lemon drops tiramisu jelly-o donut. Sweet gummi bears ice cream.
-            Cupcake ipsum dolor sit amet liquorice fruitcake. Candy canes jelly beans sweet roll cupcake lollipop.
-            Powder
-            carrot cake toffee brownie. Marshmallow sweet roll donut. Chocolate cake apple pie candy canes tiramisu
-            dragée
-            wafer. Croissant cookie lemon drops tiramisu jelly-o donut. Sweet gummi bears ice cream.
-            Cupcake ipsum dolor sit amet liquorice fruitcake. Candy canes jelly beans sweet roll cupcake lollipop.
-            Powder
-            carrot cake toffee brownie. Marshmallow sweet roll donut. Chocolate cake apple pie candy canes tiramisu
-            dragée
-            wafer. Croissant cookie lemon drops tiramisu jelly-o donut. Sweet gummi bears ice cream.
-            Cupcake ipsum dolor sit amet liquorice fruitcake. Candy canes jelly beans sweet roll cupcake lollipop.
-            Powder
-            carrot cake toffee brownie. Marshmallow sweet roll donut. Chocolate cake apple pie candy canes tiramisu
-            dragée
-            wafer. Croissant cookie lemon drops tiramisu jelly-o donut. Sweet gummi bears ice cream.
-            Cupcake ipsum dolor sit amet liquorice fruitcake. Candy canes jelly beans sweet roll cupcake lollipop.
-            Powder
-            carrot cake toffee brownie. Marshmallow sweet roll donut. Chocolate cake apple pie candy canes tiramisu
-            dragée
-            wafer. Croissant cookie lemon drops tiramisu jelly-o donut. Sweet gummi bears ice cream.
-            Cupcake ipsum dolor sit amet liquorice fruitcake. Candy canes jelly beans sweet roll cupcake lollipop.
-            Powder
-            carrot cake toffee brownie. Marshmallow sweet roll donut. Chocolate cake apple pie candy canes tiramisu
-            dragée
-            wafer. Croissant cookie lemon drops tiramisu jelly-o donut. Sweet gummi bears ice cream.
-            Cupcake ipsum dolor sit amet liquorice fruitcake. Candy canes jelly beans sweet roll cupcake lollipop.
-            Powder
-            carrot cake toffee brownie. Marshmallow sweet roll donut. Chocolate cake apple pie candy canes tiramisu
-            dragée
-            wafer. Croissant cookie lemon drops tiramisu jelly-o donut. Sweet gummi bears ice cream.
-
-
-                            </textarea>
+                            <textarea className="text" id="text" spellCheck="false" onScroll={e => this.textScroll(e)} onChange={this.handleChanges}
+                                      value={this.state.text} name={'text'}
+                            />
                             <div className="location">
                                 <FontAwesomeIcon icon={faMapMarkerAlt}/> Bruges, Belgique
                             </div>
                             <div className="carousel">
-                                <b className="carousel-icon left">{"<"}</b>
+                                <b className="carousel-icon left" onClick={this.previousImage}>{"<"}</b>
                                 <div className="image-container">
-                                    <img className="carousel-image active" src="/images/1.jpg" alt="1.jpg"/>
-                                    <img className="carousel-image" src="/images/2.jpg" alt="1.jpg"/>
-                                    <img className="carousel-image" src="/images/3.jpg" alt="1.jpg"/>
+                                    {this.getImageList()}
                                 </div>
-                                <b className="carousel-icon right">{">"}</b>
+                                <b className="carousel-icon right" onClick={this.nextImage}>{">"}</b>
                             </div>
 
                         </div>

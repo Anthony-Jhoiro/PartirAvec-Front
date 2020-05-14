@@ -4,7 +4,7 @@ import Keycloak from 'keycloak-js';
 import Spinner from "../Components/tools/Spinner/Spinner";
 import MainMenu from "../Components/tools/MainMenu/MainMenu";
 import {BrowserRouter, Route} from "react-router-dom";
-import Paper from "../Components/Paper";
+import Paper from "../Components/Paper/Paper";
 
 
 class MapPage extends Component{

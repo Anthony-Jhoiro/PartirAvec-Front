@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css?family=Indie+Flower");
+$font: "Indie Flower";
+
+$labelColor: #eee;
+$labelLineHeight: 1.6em;
+$labelBg: #fff;
+
+.center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.etiquette {
+  text-align: center;
+  border: 2px solid black;
+  z-index: 50;
+  background-color: $labelBg;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 4px solid black;
+    //background-color: $labelBg;
+    z-index: -1;
+  }
+  .lines {
+    margin: 8px;
+    font-family: $font;
+    z-index: 50;
+    input[type="file"] {
+      display: none;
+    }
+    line-height: $labelLineHeight;
+    height: $labelLineHeight * 4;
+    width: 300px;
+    background-image: repeating-linear-gradient(
+                    transparent 0px,
+                    transparent calc(#{$labelLineHeight} - 1px),
+                    black $labelLineHeight
+    );
+
+    h3 {
+      margin: 0;
+    }
+
+    .tab {
+      input[type=text] {
+        border: none;
+        outline: none;
+        background: none;
+
+      }
+    }
+
+    .head {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      span {
+        cursor: pointer;
+      }
+
+      span.active {
+        text-decoration: underline;
+      }
+    }
+
+    .load-button {
+      cursor: pointer;
+    }
+
+  }
+}

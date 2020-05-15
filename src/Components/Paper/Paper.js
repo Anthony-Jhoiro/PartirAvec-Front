@@ -1,8 +1,10 @@
 import React from 'react';
 import './Paper.scss';
-import {faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons";
+import {faMapMarkerAlt, faCheck, faTimes, faCameraRetro} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Geocode from "react-geocode";
+import ImagePicker from "../ImagePicker/ImagePicker";
+import axios from 'axios';
 
 class Paper extends React.Component {
 
@@ -20,12 +22,16 @@ class Paper extends React.Component {
             ],
             activeImageIndex: 0,
             placeTimeout: null,
-            place: ''
+            place: '',
+            formValid: false,
+            activeImagePicker: false
         }
 
         this.handleChanges = this.handleChanges.bind(this);
         this.previousImage = this.previousImage.bind(this);
         this.nextImage = this.nextImage.bind(this);
+        this.handleImages = this.handleImages.bind(this);
+        this.openImagePicker = this.openImagePicker.bind(this);
     }
 
     // Form
@@ -43,14 +49,15 @@ class Paper extends React.Component {
                     if (this.state.place === null || this.state.place === "") return;
                     Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_KEY);
                     Geocode.setLanguage("fr");
-                    Geocode.fromAddress(this.state.place).then(
-                        response => {
-                            console.log(response);
-                        },
-                        error => {
-                            console.error(error);
-                        }
-                    )
+                    // TODO :  enable in prod
+                    //     Geocode.fromAddress(this.state.place).then(
+                    //         response => {
+                    //             console.log(response);
+                    //         },
+                    //         error => {
+                    //             console.error(error);
+                    //         }
+                    //     )
                 }, 1000),
                 place: event.target.value
             });
@@ -72,7 +79,6 @@ class Paper extends React.Component {
             e.target.scrollTop = this.state.lastScrollTop - unit;
 
         }
-
         this.setState({
             lastScrollTop: e.target.scrollTop
         });
@@ -101,12 +107,71 @@ class Paper extends React.Component {
         }
     }
 
+    getValidButton() {
+        if (this.state.text.length > 0
+            && this.state.title.length > 0
+            && this.state.place.length > 0) {
+
+            if (!this.state.formValid) this.setState({formValid: true});
+
+            return <button className={'button-valid'}><FontAwesomeIcon icon={faCheck}/></button>
+        } else {
+            if (this.state.formValid) {
+                this.setState({formValid: false});
+            }
+            return '';
+        }
+    }
+
+    handleImages(data) {
+        if (data.local) {
+            const formData = new FormData();
+            formData.append('file', data.file);
+            axios.post(
+                'http://localhost:10103',
+                formData,
+                {
+                    'content-type': 'multipart/form-data'
+                }
+            ).then((fileName) => {
+                console.log(fileName);
+                let lst =  this.state.imageList;
+                lst.push(fileName.data);
+                this.setState({
+                    imageList: lst,
+                    activeImagePicker: false
+                });
+            });
+        }
+        else {
+            let lst =  this.state.imageList;
+            lst.push(data.url);
+            this.setState({
+                imageList: lst,
+                activeImagePicker: false
+            });
+        }
+    }
+
+    getImagePicker() {
+        if (this.state.activeImagePicker) {
+            return (<ImagePicker onSubmit={this.handleImages}/>);
+        } else {
+            return '';
+        }
+    }
+    openImagePicker() {
+        this.setState({activeImagePicker: true});
+    }
+
     render() {
         return (
             <div className="pile">
                 <div className="paper">
+                    {this.getValidButton()}
                     <div className="lines">
-                        <input className="title" value={this.state.title} onChange={this.handleChanges} name={'title'} placeholder={'Titre'}/>
+                        <input className="title" value={this.state.title} onChange={this.handleChanges} name={'title'}
+                               placeholder={'Titre'}/>
                         <div className="content">
                             <textarea className="text" id="text" spellCheck="false" onScroll={e => this.textScroll(e)}
                                       onChange={this.handleChanges}
@@ -118,9 +183,12 @@ class Paper extends React.Component {
                                 <input type="text" className="place-input" name={'place'} value={this.state.place}
                                        onChange={this.handleChanges} placeholder={'Où ?'}/>
                             </div>
+                            <button className={'photo-icon'} onClick={this.openImagePicker}><FontAwesomeIcon icon={faCameraRetro}/></button>
                             <div className="carousel">
+
                                 <b className="carousel-icon left" onClick={this.previousImage}>{"<"}</b>
                                 <div className="image-container">
+                                    <button className={'delete-image'}><FontAwesomeIcon icon={faTimes}/></button>
                                     {this.getImageList()}
                                 </div>
                                 <b className="carousel-icon right" onClick={this.nextImage}>{">"}</b>
@@ -136,6 +204,7 @@ class Paper extends React.Component {
 
                 <div className="paper"/>
                 <div className="paper"/>
+                {this.getImagePicker()}
             </div>);
     }
 }

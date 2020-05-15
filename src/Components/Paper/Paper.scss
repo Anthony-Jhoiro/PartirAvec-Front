@@ -40,6 +40,16 @@ body {
     margin-left: .5em;
   }
 
+  .button-valid {
+    position: absolute;
+    color: #70ff7b;
+    right: .4em;
+    top: .4em;
+    font-size: 1.5em;
+    z-index: 15;
+    cursor: pointer;
+  }
+
   &::before {
     content: "";
     position: absolute;
@@ -110,6 +120,22 @@ body {
           font-size: 4em;
           cursor: pointer;
         }
+        .image-container {
+          position: relative;
+          .delete-image {
+            position: absolute;
+            color: #86211a;
+            padding: 0;
+            right: -.2em;
+            top: -.2em;
+            border-radius: 50%;
+            transition: 1s;
+            :hover {
+              color: #f13129;
+            }
+          }
+        }
+
         .image-container,
         .image-container img {
           max-width: 8em;

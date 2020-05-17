@@ -5,8 +5,12 @@
   top: 2em;
   
   button, a {
-    position: absolute;
+    border: none;
     outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
     height: 1.8em;
     width: 1.8em;
     line-height: 1.8em;

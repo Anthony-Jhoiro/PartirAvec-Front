@@ -6,6 +6,7 @@ import {BrowserRouter, Route} from "react-router-dom";
 import Paper from "../Components/Paper/Paper";
 import keycloakService from "../Services/keycloakService";
 import httpService from "../Services/httpService";
+import './MapPage.scss';
 
 
 class MapPage extends Component {

@@ -4,6 +4,8 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
 import am4geodata_franceHigh from "@amcharts/amcharts4-geodata/franceHigh";
+import am4geodata_worldUltra from "@amcharts/amcharts4-geodata/worldUltra";
+
 import httpService from "../Services/httpService";
 
 am4core.useTheme(am4themes_animated);
@@ -23,7 +25,7 @@ export class Map extends React.Component {
         let chart = am4core.create("world-map", am4maps.MapChart);
 
         // Set map definition
-        chart.geodata = am4geodata_worldLow;
+        chart.geodata = am4geodata_worldUltra;
 
         // Set projection
         chart.projection = new am4maps.projections.Miller();
@@ -47,10 +49,6 @@ export class Map extends React.Component {
                     })
                 }
             });
-        // polygonSeries.data = [{
-        //     id: 'FR',
-        //     fill: am4core.color(selectionColor)
-        // }];
 
         // Configure series
         formatTemplate(polygonSeries.mapPolygons.template);
@@ -62,16 +60,6 @@ export class Map extends React.Component {
         polygonTemplate.events.on("hit", ev => {
             // zoom to an object
             ev.target.series.chart.zoomToMapObject(ev.target);
-
-            // Si la France est cliquée, on charge les régions
-            if (ev.target.dataItem.dataContext.id === 'FR') {
-                let franceSerie = chart.series.push(new am4maps.MapPolygonSeries());
-                franceSerie.geodata = am4geodata_franceHigh;
-                formatTemplate(franceSerie.mapPolygons.template);
-
-            } else if (chart.series.length > 1) {
-                chart.series.pop();
-            }
         });
 
 
@@ -80,7 +68,6 @@ export class Map extends React.Component {
         hs.properties.fill = am4core.color(selectionColor);
 
 
-        // France detail
         function formatTemplate(template) {
             template.tooltipText = "{name}";
             template.fill = am4core.color(backgroundColor);

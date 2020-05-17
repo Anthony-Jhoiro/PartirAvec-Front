@@ -23,9 +23,12 @@ const updateToken = callback => {
         .catch(_keycloak.login)
 }
 
+const logout = () => _keycloak.logout();
+
 export default {
     initKeycloak,
     updateToken,
     getAuthentication,
-    getToken
+    getToken,
+    logout
 }

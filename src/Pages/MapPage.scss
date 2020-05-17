@@ -1,0 +1,11 @@
+@import "../_variables";
+
+.map-container {
+  z-index: 0;
+  &>div {
+    height: calc(100vh);
+  }
+  &.blur {
+    filter: blur(0.8px);
+  }
+}

@@ -3,6 +3,7 @@ import './MainMenu.scss';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faBars, faTimes, faPlus, faBook, faSignOutAlt, faMap} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
+import keycloakService from "../../../Services/keycloakService";
 
 function MainMenu() {
 
@@ -27,9 +28,9 @@ function MainMenu() {
                 <FontAwesomeIcon icon={faBook}/>
             </Link>
             {/*Logout*/}
-            <Link to={"/"}>
+            <button onClick={() => keycloakService.logout()}>
                 <FontAwesomeIcon icon={faSignOutAlt}/>
-            </Link>
+            </button>
         </nav>
     )
 }

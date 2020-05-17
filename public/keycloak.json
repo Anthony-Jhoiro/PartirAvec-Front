@@ -2,7 +2,7 @@
   "realm": "PartirAvec",
   "auth-server-url": "http://localhost:8080/auth/",
   "ssl-required": "external",
-  "resource": "partiravec-front",
+  "resource": "partiravec-back",
   "public-client": true,
   "confidential-port": 0
 }

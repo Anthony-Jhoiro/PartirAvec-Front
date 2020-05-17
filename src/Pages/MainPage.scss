@@ -1,0 +1,32 @@
+@import "../_variables";
+
+#main-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .main-title {
+    font-size: 3em;
+  }
+
+  #map {
+    height: 60vh;
+  }
+
+  .start-link {
+    border: none;
+    background: none;
+
+    a {
+      font-size: 3em;
+      color: $fontColor;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

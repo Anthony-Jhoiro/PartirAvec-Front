@@ -4,6 +4,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
 import am4geodata_franceHigh from "@amcharts/amcharts4-geodata/franceHigh";
+import httpService from "../Services/httpService";
 
 am4core.useTheme(am4themes_animated);
 
@@ -33,10 +34,23 @@ export class Map extends React.Component {
         // Make map load polygon (like country names) data from GeoJSON
         polygonSeries.useGeodata = true;
         polygonSeries.exclude = ["AQ"];
-        polygonSeries.data = [{
-            id: 'FR',
-            fill: am4core.color(selectionColor)
-        }];
+
+        httpService.getAxiosClient().get(process.env.REACT_APP_API_LOCATION + '/destinationservice/countries')
+            .then(data => {
+                if (data.data) {
+                    console.log(data.data)
+                    polygonSeries.data = data.data.map(country => {
+                        return {
+                            id: country.code,
+                            fill: am4core.color(selectionColor)
+                        }
+                    })
+                }
+            });
+        // polygonSeries.data = [{
+        //     id: 'FR',
+        //     fill: am4core.color(selectionColor)
+        // }];
 
         // Configure series
         formatTemplate(polygonSeries.mapPolygons.template);

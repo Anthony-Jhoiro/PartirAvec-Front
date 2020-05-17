@@ -29,6 +29,7 @@ class ImagePicker extends React.Component {
             return (<div className={'tab from-url'}>
                 <label htmlFor="url">Url : </label>
                 <input type="text" className="url" id="from-web" autoFocus={true} onChange={this.setUrl}/>
+                {(this.state.url.length > 0)?<button onClick={this.submit}>Submit</button>:''}
             </div>)
         }
     }

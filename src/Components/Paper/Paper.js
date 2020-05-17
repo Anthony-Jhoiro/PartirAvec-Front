@@ -5,11 +5,14 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Geocode from "react-geocode";
 import ImagePicker from "../ImagePicker/ImagePicker";
 import axios from 'axios';
+import httpService from "../../Services/httpService";
+import Carousel from "../Carousel/Carousel";
 
 class Paper extends React.Component {
 
     constructor(props) {
         super(props);
+        // starting state
         this.state = {
             currentScrollPosition: 0,
             lastScrollTop: 0,
@@ -20,18 +23,14 @@ class Paper extends React.Component {
                 '/images/2.jpg',
                 '/images/3.jpg'
             ],
-            activeImageIndex: 0,
             placeTimeout: null,
             place: '',
             formValid: false,
-            activeImagePicker: false
         }
 
+        // Bind this for methods used in template
         this.handleChanges = this.handleChanges.bind(this);
-        this.previousImage = this.previousImage.bind(this);
-        this.nextImage = this.nextImage.bind(this);
-        this.handleImages = this.handleImages.bind(this);
-        this.openImagePicker = this.openImagePicker.bind(this);
+
     }
 
     // Form
@@ -84,29 +83,6 @@ class Paper extends React.Component {
         });
     }
 
-    getImageList() {
-        return this.state.imageList.map((image, i) => {
-            return <img key={i} className={`carousel-image ${(this.state.activeImageIndex === i) ? "active" : ""} `}
-                        src={image} alt={"introuvable"}/>
-        })
-    }
-
-    nextImage() {
-        if (this.state.activeImageIndex === this.state.imageList.length - 1) {
-            this.setState({activeImageIndex: 0});
-        } else {
-            this.setState({activeImageIndex: this.state.activeImageIndex + 1});
-        }
-    }
-
-    previousImage() {
-        if (this.state.activeImageIndex === 0) {
-            this.setState({activeImageIndex: this.state.imageList.length - 1});
-        } else {
-            this.setState({activeImageIndex: this.state.activeImageIndex - 1});
-        }
-    }
-
     getValidButton() {
         if (this.state.text.length > 0
             && this.state.title.length > 0
@@ -121,47 +97,6 @@ class Paper extends React.Component {
             }
             return '';
         }
-    }
-
-    handleImages(data) {
-        if (data.local) {
-            const formData = new FormData();
-            formData.append('file', data.file);
-            axios.post(
-                'http://localhost:10103',
-                formData,
-                {
-                    'content-type': 'multipart/form-data'
-                }
-            ).then((fileName) => {
-                console.log(fileName);
-                let lst =  this.state.imageList;
-                lst.push(fileName.data);
-                this.setState({
-                    imageList: lst,
-                    activeImagePicker: false
-                });
-            });
-        }
-        else {
-            let lst =  this.state.imageList;
-            lst.push(data.url);
-            this.setState({
-                imageList: lst,
-                activeImagePicker: false
-            });
-        }
-    }
-
-    getImagePicker() {
-        if (this.state.activeImagePicker) {
-            return (<ImagePicker onSubmit={this.handleImages}/>);
-        } else {
-            return '';
-        }
-    }
-    openImagePicker() {
-        this.setState({activeImagePicker: true});
     }
 
     render() {
@@ -183,16 +118,9 @@ class Paper extends React.Component {
                                 <input type="text" className="place-input" name={'place'} value={this.state.place}
                                        onChange={this.handleChanges} placeholder={'Où ?'}/>
                             </div>
-                            <button className={'photo-icon'} onClick={this.openImagePicker}><FontAwesomeIcon icon={faCameraRetro}/></button>
-                            <div className="carousel">
 
-                                <b className="carousel-icon left" onClick={this.previousImage}>{"<"}</b>
-                                <div className="image-container">
-                                    <button className={'delete-image'}><FontAwesomeIcon icon={faTimes}/></button>
-                                    {this.getImageList()}
-                                </div>
-                                <b className="carousel-icon right" onClick={this.nextImage}>{">"}</b>
-                            </div>
+                            {/*{this.getCarousel()}*/}
+                            <Carousel imageList={this.state.imageList} />
 
                         </div>
 
@@ -204,7 +132,6 @@ class Paper extends React.Component {
 
                 <div className="paper"/>
                 <div className="paper"/>
-                {this.getImagePicker()}
             </div>);
     }
 }

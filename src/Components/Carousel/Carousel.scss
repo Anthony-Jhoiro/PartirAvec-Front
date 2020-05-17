@@ -1,0 +1,56 @@
+@import "../../__variables.scss";
+
+.carousel {
+  position: relative;
+  margin-top: $lineHeight;
+  display: flex;
+  line-height: 6em;
+
+  max-height: 6em;
+  overflow: hidden;
+  justify-content: space-evenly;
+
+  .photo-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1.4em;
+  }
+
+  .carousel-icon {
+    font-size: 4em;
+    cursor: pointer;
+  }
+  .image-container {
+    position: relative;
+    .delete-image {
+      position: absolute;
+      color: #86211a;
+      padding: 0;
+      right: -.2em;
+      top: -.2em;
+      border-radius: 50%;
+      transition: 1s;
+      :hover {
+        color: #f13129;
+      }
+    }
+  }
+
+  .image-container,
+  .image-container img {
+    max-width: 8em;
+    max-height: 6em;
+    width: 8em;
+    height: 6em;
+    object-fit: contain;
+    background-color: transparent;
+
+    &.carousel-image {
+      display: none;
+    }
+    &.active {
+      display: block;
+    }
+  }
+}

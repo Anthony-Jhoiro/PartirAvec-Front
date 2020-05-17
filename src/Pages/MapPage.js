@@ -58,7 +58,7 @@ class MapPage extends Component {
         if (this.state.authenticated) {
             return (
                 <main>
-                    <Map/>
+                    <Map disable={false}/>
                     <BrowserRouter>
                         <MainMenu/>
                         <Route path={'/map/new'} component={Paper}/>

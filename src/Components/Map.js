@@ -2,8 +2,6 @@ import React from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import * as am4maps from "@amcharts/amcharts4/maps";
-import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
-import am4geodata_franceHigh from "@amcharts/amcharts4-geodata/franceHigh";
 import am4geodata_worldUltra from "@amcharts/amcharts4-geodata/worldUltra";
 
 import httpService from "../Services/httpService";
@@ -90,7 +88,7 @@ export class Map extends React.Component {
 
     render() {
         return (
-            <div className="map-container">
+            <div className={"map-container"}>
                 <div id="world-map"/>
             </div>
         );

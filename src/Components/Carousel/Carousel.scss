@@ -10,6 +10,11 @@
   overflow: hidden;
   justify-content: space-evenly;
 
+  button {
+    border: none;
+    background: none;
+  }
+
   .photo-icon {
     position: absolute;
     left: 0;
@@ -53,4 +58,17 @@
       display: block;
     }
   }
+}
+
+.big-photo-icon {
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: .5em;
+  font-size: 3em;
+  outline: none;
+
 }

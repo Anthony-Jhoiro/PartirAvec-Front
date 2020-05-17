@@ -30,7 +30,7 @@ class Carousel extends React.Component {
             let config = httpService.getConfig();
             config.headers['content-type'] = 'multipart/form-data'
             httpService.getAxiosClient().post(
-                process.env.REACT_APP_API_LOCATION + '/uploadservice',
+                process.env.REACT_APP_UPLOAD_LOCATION + '/uploadservice',
                 formData,
                 config
             ).then((fileName) => {
@@ -104,7 +104,11 @@ class Carousel extends React.Component {
             )
         } else {
             return (
-                <button className={'big-photo-icon'} onClick={this.openImagePicker}><FontAwesomeIcon icon={faCameraRetro}/></button>
+                <div>
+
+                    {this.getImagePicker()}
+                    <button className={'big-photo-icon'} onClick={this.openImagePicker}><FontAwesomeIcon icon={faCameraRetro}/></button>
+                </div>
             )
         }
     }

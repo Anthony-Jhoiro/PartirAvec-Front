@@ -1,10 +1,8 @@
 import React from 'react';
 import './Paper.scss';
-import {faMapMarkerAlt, faCheck, faTimes, faCameraRetro} from "@fortawesome/free-solid-svg-icons";
+import {faMapMarkerAlt, faCheck} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Geocode from "react-geocode";
-import ImagePicker from "../ImagePicker/ImagePicker";
-import axios from 'axios';
 import httpService from "../../Services/httpService";
 import Carousel from "../Carousel/Carousel";
 
@@ -18,11 +16,7 @@ class Paper extends React.Component {
             lastScrollTop: 0,
             text: '',
             title: '',
-            imageList: [
-                '/images/1.jpg',
-                '/images/2.jpg',
-                '/images/3.jpg'
-            ],
+            imageList: [],
             placeTimeout: null,
             place: '',
             formValid: false,
@@ -119,7 +113,6 @@ class Paper extends React.Component {
                                        onChange={this.handleChanges} placeholder={'Où ?'}/>
                             </div>
 
-                            {/*{this.getCarousel()}*/}
                             <Carousel imageList={this.state.imageList} />
 
                         </div>

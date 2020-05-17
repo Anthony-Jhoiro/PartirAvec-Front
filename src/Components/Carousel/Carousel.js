@@ -34,16 +34,15 @@ class Carousel extends React.Component {
                 formData,
                 config
             ).then((fileName) => {
-                let lst =  this.props.imageList;
+                let lst = this.props.imageList;
                 lst.push(fileName.data);
                 this.setState({
                     imageList: lst,
                     activeImagePicker: false
                 });
             });
-        }
-        else {
-            let lst =  this.props.imageList;
+        } else {
+            let lst = this.props.imageList;
             lst.push(data.url);
             this.setState({
                 imageList: lst,
@@ -83,6 +82,30 @@ class Carousel extends React.Component {
         }
     }
 
+    getRemoveIcon() {
+        if (!this.props.disable) {
+            return <button className={'delete-image'}><FontAwesomeIcon icon={faTimes}/></button>
+        }
+        return ''
+    }
+
+    getAddIcon() {
+        if (!this.props.disable) {
+            return <button className={'photo-icon'} onClick={this.openImagePicker}><FontAwesomeIcon
+                icon={faCameraRetro}/></button>
+        }
+        return ''
+    }
+
+    getBigAddIcon() {
+        if (!this.props.disable) {
+            return <button className={'big-photo-icon'} onClick={this.openImagePicker}>
+                    <FontAwesomeIcon icon={faCameraRetro}/>
+            </button>
+        }
+        return ''
+    }
+
     render() {
         if (this.props.imageList.length > 0) {
             return (
@@ -90,11 +113,11 @@ class Carousel extends React.Component {
 
                     {this.getImagePicker()}
                     <div className="carousel">
-                        <button className={'photo-icon'} onClick={this.openImagePicker}><FontAwesomeIcon icon={faCameraRetro}/></button>
+                        {this.getAddIcon()}
 
                         <b className="carousel-icon left" onClick={this.previousImage}>{"<"}</b>
                         <div className="image-container">
-                            <button className={'delete-image'}><FontAwesomeIcon icon={faTimes}/></button>
+                            {this.getRemoveIcon()}
                             {this.getImageList()}
                         </div>
                         <b className="carousel-icon right" onClick={this.nextImage}>{">"}</b>
@@ -107,7 +130,7 @@ class Carousel extends React.Component {
                 <div>
 
                     {this.getImagePicker()}
-                    <button className={'big-photo-icon'} onClick={this.openImagePicker}><FontAwesomeIcon icon={faCameraRetro}/></button>
+                    {this.getBigAddIcon()}
                 </div>
             )
         }

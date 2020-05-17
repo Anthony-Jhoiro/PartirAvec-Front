@@ -19,12 +19,12 @@ function MainMenu() {
                 <FontAwesomeIcon icon={faMap}/>
             </Link>
             {/*Add*/}
-            <Link to={"/map/new"}>
+            <Link to={"/map/destination"}>
                 <FontAwesomeIcon icon={faPlus}/>
             </Link>
 
             {/*open book*/}
-            <Link to={"/"}>
+            <Link to={"/map/book"}>
                 <FontAwesomeIcon icon={faBook}/>
             </Link>
             {/*Logout*/}

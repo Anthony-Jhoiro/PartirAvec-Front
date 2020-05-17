@@ -4,6 +4,7 @@ import Spinner from "../Components/tools/Spinner/Spinner";
 import MainMenu from "../Components/tools/MainMenu/MainMenu";
 import {BrowserRouter, Route} from "react-router-dom";
 import Paper from "../Components/Paper/Paper";
+import Book from "../Components/Book/Book";
 import keycloakService from "../Services/keycloakService";
 import httpService from "../Services/httpService";
 import './MapPage.scss';
@@ -58,10 +59,13 @@ class MapPage extends Component {
         if (this.state.authenticated) {
             return (
                 <main>
-                    <Map disable={false}/>
+                    <Map/>
                     <BrowserRouter>
                         <MainMenu/>
-                        <Route path={'/map/new'} component={Paper}/>
+                        <Route path={'/map/destination'} component={Paper}/>
+                        <Route path={'/map/destination/:destId'} component={Paper}/>
+
+                        <Route path={'/map/book'} component={Book}/>
                     </BrowserRouter>
                 </main>
             );

@@ -1,24 +1,26 @@
 import React from 'react';
 import './Paper.scss';
-import {faMapMarkerAlt, faCheck} from "@fortawesome/free-solid-svg-icons";
+import {faMapMarkerAlt, faCheck, faBook} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Geocode from "react-geocode";
 import httpService from "../../Services/httpService";
 import Carousel from "../Carousel/Carousel";
+import {Link} from "react-router-dom";
 
 class Paper extends React.Component {
 
     constructor(props) {
         super(props);
+        this.destId = this.props.match.params.destId;
         // starting state
         this.state = {
             currentScrollPosition: 0,
             lastScrollTop: 0,
-            text: '',
-            title: '',
-            imageList: [],
+            text: 'hello',
+            title: 'hola',
+            imageList: ['/images/1.jpg', '/images/2.jpg', '/images/3.jpg'],
             placeTimeout: null,
-            place: '',
+            place: 'bonjour',
             formValid: false,
         }
 
@@ -26,6 +28,7 @@ class Paper extends React.Component {
         this.handleChanges = this.handleChanges.bind(this);
 
     }
+
 
     // Form
     handleChanges(event) {
@@ -78,18 +81,30 @@ class Paper extends React.Component {
     }
 
     getValidButton() {
-        if (this.state.text.length > 0
-            && this.state.title.length > 0
-            && this.state.place.length > 0) {
+        if (this.destId == null) {
+            if (this.state.text.length > 0
+                && this.state.title.length > 0
+                && this.state.place.length > 0) {
 
-            if (!this.state.formValid) this.setState({formValid: true});
+                if (!this.state.formValid) this.setState({formValid: true});
 
-            return <button className={'button-valid'}><FontAwesomeIcon icon={faCheck}/></button>
-        } else {
-            if (this.state.formValid) {
-                this.setState({formValid: false});
+                return <button className={'button-valid'}><FontAwesomeIcon icon={faCheck}/></button>
+            } else {
+                if (this.state.formValid) {
+                    this.setState({formValid: false});
+                }
+                return '';
             }
-            return '';
+        }
+    }
+
+    getBackButton() {
+        if (this.destId != null) {
+            return <button className={'back-icon'}>
+                <Link to={'/map/book'}>
+                    <FontAwesomeIcon icon={faBook}/>
+                </Link>
+            </button>
         }
     }
 
@@ -97,23 +112,26 @@ class Paper extends React.Component {
         return (
             <div className="pile">
                 <div className="paper">
+                    {this.getBackButton()}
                     {this.getValidButton()}
                     <div className="lines">
                         <input className="title" value={this.state.title} onChange={this.handleChanges} name={'title'}
-                               placeholder={'Titre'}/>
+                               placeholder={'Titre'} disabled={this.destId != null}/>
                         <div className="content">
                             <textarea className="text" id="text" spellCheck="false" onScroll={e => this.textScroll(e)}
                                       onChange={this.handleChanges}
                                       value={this.state.text} name={'text'}
                                       placeholder={'Que souhaites-tu raconter ?'}
+                                      disabled={this.destId != null}
                             />
                             <div className="location">
                                 <FontAwesomeIcon icon={faMapMarkerAlt}/>
                                 <input type="text" className="place-input" name={'place'} value={this.state.place}
-                                       onChange={this.handleChanges} placeholder={'Où ?'}/>
+                                       onChange={this.handleChanges} placeholder={'Où ?'}
+                                       disabled={this.destId != null}/>
                             </div>
 
-                            <Carousel imageList={this.state.imageList} />
+                            <Carousel imageList={this.state.imageList} disable={this.destId != null}/>
 
                         </div>
 

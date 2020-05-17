@@ -9,50 +9,23 @@ import keycloakService from "../Services/keycloakService";
 import httpService from "../Services/httpService";
 import './MapPage.scss';
 
-
+/**
+ * Main component for all pages starting with /map
+ */
 class MapPage extends Component {
     constructor(props) {
         super(props);
+        // Setup default state
         this.state = {keycloak: null, authenticated: false};
     }
 
     componentDidMount() {
+        // Configure keycloak then configure axios and then access the app
         keycloakService.initKeycloak((authenticated) => {
-            this.setState({ authenticated: authenticated });
-            httpService.configure();
-            httpService.getAxiosClient().get("http://localhost:10100/destinationservice/countries")
-            httpService.getAxiosClient().post("http://localhost:10100/destinationservice/destination", {
-                "title": "coucoucoucou",
-                "text": "lorem ipsum",
-                "location": "location",
-                "images": [
-                    "img1.png",
-                    "img2.jpg"
-                ],
-                "country": {
-                    "name": "Germany",
-                    "code": "DE"
-
-                }
-            })
-
+            httpService.configure(() => {
+                this.setState({ authenticated: authenticated });
+            });
         });
-        // const keycloak = Keycloak("/keycloak.json");
-        // keycloak.init({onLoad: 'login-required'}).then(authenticated => {
-        //     axios.get("http://localhost:10100/destinationservice/countries", {
-        //         headers: {
-        //             Authorization: 'Bearer ' + keycloak.token
-        //         }
-        //     }).then(console.log);
-        //     this.setState({ keycloak: keycloak, authenticated: authenticated });
-        //
-        // });
-
-
-    }
-
-    logout() {
-        this.state.keycloak.logout();
     }
 
     render() {
@@ -64,7 +37,6 @@ class MapPage extends Component {
                         <MainMenu/>
                         <Route path={'/map/destination'} component={Paper}/>
                         <Route path={'/map/destination/:destId'} component={Paper}/>
-
                         <Route path={'/map/book'} component={Book}/>
                     </BrowserRouter>
                 </main>

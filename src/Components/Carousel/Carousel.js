@@ -30,12 +30,12 @@ class Carousel extends React.Component {
             let config = httpService.getConfig();
             config.headers['content-type'] = 'multipart/form-data'
             httpService.getAxiosClient().post(
-                process.env.REACT_APP_UPLOAD_LOCATION + '/uploadservice',
+                process.env.REACT_APP_UPLOAD_LOCATION,
                 formData,
                 config
-            ).then((fileName) => {
+            ).then((response) => {
                 let lst = this.props.imageList;
-                lst.push(fileName.data);
+                lst.push(response.data.url);
                 this.setState({
                     imageList: lst,
                     activeImagePicker: false

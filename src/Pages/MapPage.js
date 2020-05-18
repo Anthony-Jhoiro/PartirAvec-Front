@@ -28,7 +28,9 @@ class MapPage extends Component {
         });
     }
 
+
     render() {
+        // if the client is authenticated reveal the component else it show the spinner
         if (this.state.authenticated) {
             return (
                 <main>

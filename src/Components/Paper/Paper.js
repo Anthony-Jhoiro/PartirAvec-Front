@@ -12,21 +12,61 @@ class Paper extends React.Component {
     constructor(props) {
         super(props);
         this.destId = this.props.match.params.destId;
+
+
+
         // starting state
         this.state = {
             currentScrollPosition: 0,
             lastScrollTop: 0,
-            text: 'hello',
-            title: 'hola',
-            imageList: ['/images/1.jpg', '/images/2.jpg', '/images/3.jpg'],
+            text: '',
+            title: '',
+            imageList: [],
             placeTimeout: null,
-            place: 'bonjour',
+            place: '',
             formValid: false,
+            lng: -1,
+            lat: -1,
+            countryCode: ''
         }
 
         // Bind this for methods used in template
         this.handleChanges = this.handleChanges.bind(this);
 
+    }
+
+    componentDidMount() {
+        if (this.destId) {
+            httpService.getAxiosClient().get(process.env.REACT_APP_API_LOCATION+'/destinationservice/destination/'+this.destId)
+                .then(response => {
+                    const destination = response.data;
+                    this.setState({
+                        title: destination.title,
+                        text: destination.text,
+                        lat: destination.lat,
+                        lng: destination.lng,
+                        countryCode: destination.countryCode,
+                        imageList: destination.images,
+                        place: destination.location,
+                    })
+                })
+        }
+    }
+
+    validPaper() {
+        if (this.state.formValid) {
+            httpService.getAxiosClient().post(process.env.REACT_APP_API_LOCATION+'/destinationservice/destination', {
+                title: this.state.title,
+                text: this.state.text,
+                images: this.state.imageList,
+                lng: this.state.lng,
+                lat: this.state.lat,
+                country: {
+                    code: this.state.countryCode
+                },
+                location: this.state.place
+            })
+        }
     }
 
 
@@ -45,15 +85,31 @@ class Paper extends React.Component {
                     if (this.state.place === null || this.state.place === "") return;
                     Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_KEY);
                     Geocode.setLanguage("fr");
-                    // TODO :  enable in prod
-                    //     Geocode.fromAddress(this.state.place).then(
-                    //         response => {
-                    //             console.log(response);
-                    //         },
-                    //         error => {
-                    //             console.error(error);
-                    //         }
-                    //     )
+                        Geocode.fromAddress(this.state.place).then(
+                            response => {
+                                console.log(response);
+                                // TODO : add locationOk to state (array more than 0 item)
+                                const lat = response.results[0].geometry.location.lat;
+                                const lng = response.results[0].geometry.location.lng;
+
+                                // Find country code
+                                let countryCode = "";
+                                response.results[0].address_components.forEach(adressLine => {
+                                    if (adressLine.types.indexOf("country") !== -1) {
+                                        countryCode = adressLine.short_name;
+                                    }
+                                });
+                                this.setState({
+                                    lng: lng,
+                                    lat: lat,
+                                    countryCode: countryCode
+                                })
+
+                            },
+                            error => {
+                                console.error(error);
+                            }
+                        )
                 }, 1000),
                 place: event.target.value
             });
@@ -84,11 +140,14 @@ class Paper extends React.Component {
         if (this.destId == null) {
             if (this.state.text.length > 0
                 && this.state.title.length > 0
-                && this.state.place.length > 0) {
+                && this.state.place.length > 0
+                && this.state.lat > 0
+                && this.state.lng > -1
+                && this.state.countryCode.length > 0) {
 
                 if (!this.state.formValid) this.setState({formValid: true});
 
-                return <button className={'button-valid'}><FontAwesomeIcon icon={faCheck}/></button>
+                return <button className={'button-valid'} onClick={() => this.validPaper()}><FontAwesomeIcon icon={faCheck}/></button>
             } else {
                 if (this.state.formValid) {
                     this.setState({formValid: false});

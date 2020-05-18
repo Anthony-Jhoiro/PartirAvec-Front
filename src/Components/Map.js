@@ -3,6 +3,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4geodata_worldUltra from "@amcharts/amcharts4-geodata/worldUltra";
+import am4geodata_lang_FR from "@amcharts/amcharts4-geodata/lang/FR"
 
 import httpService from "../Services/httpService";
 
@@ -19,7 +20,20 @@ export const backgroundColor = '#acacac'
 
 export class Map extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            destinationData : []
+        }
+    }
+
     componentDidMount() {
+        this.setUpChart();
+    }
+
+    setUpChart() {
+        // Set up chart
         let chart = am4core.create("world-map", am4maps.MapChart);
 
         // Set map definition
@@ -35,10 +49,11 @@ export class Map extends React.Component {
         polygonSeries.useGeodata = true;
         polygonSeries.exclude = ["AQ"];
 
+        chart.geodataNames = am4geodata_lang_FR;
+
         httpService.getAxiosClient().get(process.env.REACT_APP_API_LOCATION + '/destinationservice/countries')
             .then(data => {
                 if (data.data) {
-                    console.log(data.data)
                     polygonSeries.data = data.data.map(country => {
                         return {
                             id: country.code,
@@ -55,9 +70,28 @@ export class Map extends React.Component {
 
         formatTemplate(polygonTemplate);
 
+        let destinationSerie = chart.series.push(new am4maps.MapImageSeries());
+        let destinationSerieTemplate = destinationSerie.mapImages.template;
+
+        let circle = destinationSerieTemplate.createChild(am4core.Circle);
+        circle.radius = 8;
+        circle.fill = am4core.color("#B27799");
+        circle.stroke = am4core.color("#FFFFFF");
+        circle.strokeWidth = 4;
+        circle.nonScaling = true;
+        circle.tooltipText = "{title}";
+        destinationSerieTemplate.propertyFields.latitude = "lat";
+        destinationSerieTemplate.propertyFields.longitude = "lng";
+
         polygonTemplate.events.on("hit", ev => {
             // zoom to an object
             ev.target.series.chart.zoomToMapObject(ev.target);
+            const countryCode = ev.target.dataItem.dataContext.id;
+            httpService.getAxiosClient().get(process.env.REACT_APP_API_LOCATION+'/destinationservice/destinations/country/'+countryCode)
+                .then(response => {
+                    destinationSerie.data = response.data;
+                })
+
         });
 
 
@@ -87,6 +121,10 @@ export class Map extends React.Component {
     }
 
     render() {
+        if (this.chart) {
+
+        }
+
         return (
             <div className={"map-container"}>
                 <div id="world-map"/>

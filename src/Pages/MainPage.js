@@ -26,29 +26,30 @@ class MainPage extends React.Component{
     }
 
 
-
+    /**
+     * Configure map chart
+     */
     setUpMap() {
         var chart = am4core.create("map", am4maps.MapChart);
         chart.geodata = am4geodata_worldLow;
         chart.projection = new am4maps.projections.Orthographic();
         chart.deltaLatitude = -30;
 
-// Create map polygon series
+        // Create map polygon series
         var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
         polygonSeries.useGeodata = true;
         polygonSeries.north = 90;
         polygonSeries.south = -90;
 
-// Configure series
+        // Configure series
         var polygonTemplate = polygonSeries.mapPolygons.template;
         // polygonTemplate.tooltipText = "{name}";
         polygonTemplate.fill = am4core.color("#d7e7ce");
         polygonTemplate.stroke = am4core.color("#aaa");
         polygonTemplate.strokeWidth = 1;
 
-        setTimeout(function(){
-            chart.animate({property:"deltaLongitude", to:100000}, 20000000);
-        }, 3000)
+        // turn the map
+        chart.animate({property:"deltaLongitude", to:100000}, 20000000);
 
 
 

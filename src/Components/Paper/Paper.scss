@@ -29,6 +29,17 @@ body {
     .h-#{$i} {
       height: $i * $lineHeight;
     }
+    .mt-#{$i} {
+      margin-top: $i * $lineHeight;
+    }
+  }
+
+  .top-image, .top-image img {
+    object-fit: contain;
+    height: 8 * $lineHeight;
+    max-height: 8 * $lineHeight;
+    width: 100%;
+    overflow: hidden;
   }
 
   .back-icon {
@@ -89,11 +100,29 @@ body {
       overflow: hidden;
 
       .summary {
-        overflow-y: scroll;
+        overflow-y: hidden;
+        max-width: $paperWidth - 3em;
+        position: relative;
+        .summary-icon {
+          position: absolute;
+          font-size: 2* $lineHeight;
+          top:  $lineHeight;
+          cursor: pointer;
+          &.left {
+            left: 0;
+          }
+
+          &.right {
+            right: 0;
+          }
+
+        }
         ul {
-          margin: 0;
+          margin: 0 2em 0 2em;
+
           padding: 0;
           li {
+            list-style: none;
             .icon {
               display: none;
             }

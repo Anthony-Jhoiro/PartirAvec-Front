@@ -141,12 +141,8 @@ class Paper extends React.Component {
             if (this.state.text.length > 0
                 && this.state.title.length > 0
                 && this.state.place.length > 0
-                && this.state.lat > 0
-                && this.state.lng > -1
                 && this.state.countryCode.length > 0) {
-
                 if (!this.state.formValid) this.setState({formValid: true});
-
                 return <button className={'button-valid'} onClick={() => this.validPaper()}><FontAwesomeIcon icon={faCheck}/></button>
             } else {
                 if (this.state.formValid) {

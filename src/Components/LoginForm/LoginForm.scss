@@ -1,0 +1,44 @@
+@import "../../_variables";
+
+  .login-form {
+    margin-top: $lineHeight * 4;
+    margin-left: $lineHeight * 2;
+    margin-right: $lineHeight * 2;
+    max-height: $paperWidth / 2;
+
+    flex-direction: column;
+
+    p {
+      margin: 0;
+      padding: 0;
+      //height: 2 * $lineHeight;
+      //line-height: 2 * $lineHeight;
+      font-size: 1.4 * $lineHeight;
+      width: 100%;
+    }
+
+    input {
+      border: none;
+      background: none;
+      line-height: $lineHeight;
+      font-family: $font;
+      text-align: center;
+      width: 100%;
+
+    }
+
+    .submit-btn {
+      margin-top: .5em;
+      border: none;
+      background: none;
+      text-align: center;
+      font-family: $font;
+      width: 100%;
+      font-size: 2 * $lineHeight;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+  }

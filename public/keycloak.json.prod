@@ -1,0 +1,8 @@
+{
+  "realm": "PartirAvec",
+  "auth-server-url": "http://localhost:10111/auth/",
+  "ssl-required": "external",
+  "resource": "partiravec-client",
+  "public-client": true,
+  "confidential-port": 0
+}
